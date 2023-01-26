@@ -12,10 +12,7 @@ from rest_framework.decorators import action
 class AuthorModelViewSet(ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorModelSerializer
-
-    def get_queryset(self):
-        return Author.objects.filter(first_name__contains='вавыаф')
-
+    filterset_fields = ['first_name', 'last_name', 'bithday_year']
 
 class ArticleModelViewSet(ModelViewSet):
     queryset = Article.objects.all()
