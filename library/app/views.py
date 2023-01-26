@@ -13,6 +13,9 @@ class AuthorModelViewSet(ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorModelSerializer
 
+    def get_queryset(self):
+        return Author.objects.filter(first_name__contains='вавыаф')
+
 
 class ArticleModelViewSet(ModelViewSet):
     queryset = Article.objects.all()
