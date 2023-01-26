@@ -6,6 +6,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView
 from rest_framework import viewsets
+from rest_framework.decorators import action
 
 
 class AuthorModelViewSet(ModelViewSet):
@@ -40,4 +41,8 @@ class MyAPIView(ViewSet):
         serializer = AuthorModelSerializer(authors, many=True)
         return Response(serializer.data)
 
+
+    @action(detail=False, methods=['get'])
+    def babayka(self, request):
+        return Response({'data': 'RATATA'})
 

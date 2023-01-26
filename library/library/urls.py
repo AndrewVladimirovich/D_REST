@@ -25,13 +25,14 @@ router.register('authors', AuthorModelViewSet)
 router.register('article', ArticleModelViewSet)
 router.register('biography', BiographyModelViewSet)
 router.register('books', BookModelViewSet)
+router.register('my', MyAPIView, basename='my')
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include(router.urls)),
-    path('myapi/', MyAPIView.as_view({'get': 'list', 'post': 'destroy'})),
+    #path('myapi/', MyAPIView.as_view({'get': 'list', 'post': 'destroy'})),
 ]
 
 
