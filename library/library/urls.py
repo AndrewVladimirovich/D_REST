@@ -31,7 +31,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api/', include(router.urls)),
-    path('myapi/', MyAPIView.as_view()),
+    path('myapi/', MyAPIView.as_view({'get': 'list', 'post': 'destroy'})),
 ]
 
 

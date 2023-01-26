@@ -1,10 +1,12 @@
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ViewSet
 from .models import Author, Article, Biography, Book
 from .serializers import AuthorModelSerializer, ArticleModelSerializer, BiographyModelSerializer, BookModelSerializer
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView
+from rest_framework import viewsets
+
 
 class AuthorModelViewSet(ModelViewSet):
     queryset = Author.objects.all()
@@ -26,13 +28,16 @@ class BookModelViewSet(ModelViewSet):
     serializer_class = BookModelSerializer
 
 
-class MyAPIView(CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView):
-
-    queryset = Author.objects.all()
-    serializer_class = AuthorModelSerializer
+class MyAPIView(ViewSet):
+   
+    def list(self, request):
+       authors = Author.objects.all()
+       serializer = AuthorModelSerializer(authors, many=True)
+       return Response(serializer.data)
     
-#    def get(self, request):
-#        return Response('GET Success')
-#
-#   def post(self, request):
-#        return Response('POST Success')
+    def destroy(self, request):
+        authors = Author.objects.all()
+        serializer = AuthorModelSerializer(authors, many=True)
+        return Response(serializer.data)
+
+
