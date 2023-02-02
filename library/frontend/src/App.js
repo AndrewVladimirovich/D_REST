@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import AuthorList from './components/Author.js'
 import BookList from './components/Books' 
+import AuthorBookList from './components/AuthorBook'
 import {HashRouter, Route, Link, Switch, Redirect} from 'react-router-dom'
 import axios from 'axios'
 
@@ -66,6 +67,7 @@ class App extends React.Component {
                     <Switch>
                         <Route exact path='/' component={() => <AuthorList authors={this.state.authors}> </AuthorList>} />
                         <Route exact path='/books' component={() => <BookList items={this.state.books}> </BookList>} />
+                        <Route exact path='/author/:id' component={() => <AuthorBookList items={this.state.books}> </AuthorBookList>} />
                         <Redirect from='/authors' to='/'/>
                         <Route component={NotFound404}/>
                     </Switch>

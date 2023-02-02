@@ -1,10 +1,11 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const AuthorItem = ({author}) => {
    return (
         <tr> 
             <td>
-               {author.id}
+               <Link to={'author/${author.id}'}>{author.id}</Link>
             </td>
             <td>
                {author.first_name}
@@ -31,5 +32,5 @@ const AuthorList = ({authors}) => {
             {authors.map((author) => <AuthorItem author={author} />)}
         </table>
  ) }
- 
+
  export default AuthorList
