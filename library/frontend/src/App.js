@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import AuthorList from './components/Author.js'
 import BookList from './components/Books' 
+import {HashRouter, Route} from 'react-router-dom'
 import axios from 'axios'
 
 class App extends React.Component {
@@ -41,9 +42,13 @@ class App extends React.Component {
     
     render () {
         return (
-            <div>
-               <AuthorList authors={this.state.authors} />
-               <BookList items={this.state.books} />
+            <div className='App'>
+                <HashRouter>
+                    <Route exact path='/' component={() => <AuthorList authors={this.state.authors}> </AuthorList>} />
+                    <Route exact path='/books' component={() => <BookList items={this.state.books}> </BookList>} />
+                </HashRouter>
+                {/* <AuthorList authors={this.state.authors} />
+                <BookList items={this.state.books} /> */}
             </div>
         )
     } 
