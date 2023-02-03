@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny
 
 
 class AuthorModelViewSet(ModelViewSet):
@@ -27,6 +28,7 @@ class BiographyModelViewSet(ModelViewSet):
 class BookModelViewSet(ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookModelSerializer
+    permission_classes = [AllowAny]
 
 
 class MyAPIView(ViewSet):
