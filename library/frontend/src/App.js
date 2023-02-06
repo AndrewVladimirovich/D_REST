@@ -6,6 +6,7 @@ import BookList from './components/Books'
 import AuthorBookList from './components/AuthorBook'
 import {HashRouter, Route, Link, Switch, Redirect, BrowserRouter} from 'react-router-dom'
 import axios from 'axios'
+import LoginForm from './components/Auth';
 
 const NotFound404 = ({ location }) => {
     return (
@@ -65,12 +66,16 @@ class App extends React.Component {
                             <li>
                                 <Link to='/books'>Books</Link>
                             </li>
+                            <li>
+                                <Link to='/login'>Login</Link>
+                            </li>
                         </ul>
                     </nav>
                     <Switch>
                         <Route exact path='/' component={() => <AuthorList authors={this.state.authors}> </AuthorList>} />
                         <Route exact path='/books' component={() => <BookList items={this.state.books}> </BookList>} />
                         <Route exact path='/author/:id' component={() => <AuthorBookList items={this.state.books}> </AuthorBookList>} />
+                        <Route exact path='/login ' component={() => <LoginForm></LoginForm>} />
                         <Redirect from='/authors' to='/'/>
                         <Route component={NotFound404}/>
                     </Switch>
