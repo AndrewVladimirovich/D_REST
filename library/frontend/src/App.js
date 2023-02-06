@@ -7,6 +7,7 @@ import AuthorBookList from './components/AuthorBook'
 import {HashRouter, Route, Link, Switch, Redirect, BrowserRouter} from 'react-router-dom'
 import axios from 'axios'
 import LoginForm from './components/Auth';
+import Cookies from 'universal-cookie'
 
 const NotFound404 = ({ location }) => {
     return (
@@ -23,8 +24,36 @@ class App extends React.Component {
 
         this.state = {
            'authors': [],
-           'books': []
+           'books': [],
+           'token': ''
         } 
+    }
+
+    set_token(token) {
+        const cookies = new Cookies()
+        cookies.set('token', token)
+        this.setState(({'token': token}))
+    }
+
+    is_authenticated() {
+        return this.state.token !== ''
+    }
+
+    logout() {
+        this.set_token('')
+    }
+
+    get_token_from_storage() {
+        const cookies = new Cookies()
+        const token = cookies.get('token')
+        this.setState({'token': token})
+    }
+
+    get_token(login, password) {
+        axios.post('http://127.0.0.1:8000/api-token-auth', {login: login, password: password})
+            .then(response => {
+                this.set_token(response.data['token'])
+            }).catch(error => alert('Неверный пароль'))
     }
 
     load_data() {
@@ -51,6 +80,7 @@ class App extends React.Component {
 
     
     componentDidMount() {
+        this.get_token_from_storage()
         this.load_data()
     }
     
@@ -67,7 +97,8 @@ class App extends React.Component {
                                 <Link to='/books'>Books</Link>
                             </li>
                             <li>
-                                <Link to='/login'>Login</Link>
+                                {this.is_authenticated() ? <button onClick={() => this.logout()}>Logout</button> : <Link to='/login'>Login</Link>}
+                                
                             </li>
                         </ul>
                     </nav>
@@ -75,7 +106,7 @@ class App extends React.Component {
                         <Route exact path='/' component={() => <AuthorList authors={this.state.authors}> </AuthorList>} />
                         <Route exact path='/books' component={() => <BookList items={this.state.books}> </BookList>} />
                         <Route exact path='/author/:id' component={() => <AuthorBookList items={this.state.books}> </AuthorBookList>} />
-                        <Route exact path='/login ' component={() => <LoginForm></LoginForm>} />
+                        <Route exact path='/login ' component={() => <LoginForm get_token={(login, password) => this.get_token(login, password)}></LoginForm>} />
                         <Redirect from='/authors' to='/'/>
                         <Route component={NotFound404}/>
                     </Switch>
