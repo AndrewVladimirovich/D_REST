@@ -7,13 +7,19 @@ from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.pagination import LimitOffsetPagination
+
+class AuthorPaginator(LimitOffsetPagination):
+    default_limit = 10
 
 
 class AuthorModelViewSet(ModelViewSet):
     queryset = Author.objects.all()
+    permission_classes = [IsAuthenticated]
     serializer_class = AuthorModelSerializer
     filterset_fields = ['first_name', 'last_name', 'bithday_year']
+    pagination_class = AuthorPaginator
 
 class ArticleModelViewSet(ModelViewSet):
     queryset = Article.objects.all()
