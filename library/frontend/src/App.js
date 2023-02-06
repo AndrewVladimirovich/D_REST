@@ -20,35 +20,38 @@ class App extends React.Component {
    constructor(props) {
        super(props)
 
-       const author1 = {id: 1, first_name: 'Достоевский', birthday_year: 1821}
-       const author2 = {id: 2, first_name: 'Чехов', birthday_year: 1860}
-       const authors = [author1, author2]
-
-       const book1 = {id: 1, name: 'Преступление и наказание', author: author1}
-       const book2 = {id: 2, name: 'Игрок', author: author1}
-       const book3 = {id: 3, name: 'Лошадинная фамилия', author: author2}
-       const book4 = {id: 4, name: 'Пари', author: author2}
-       const books = [book1, book2, book3, book4]
-
-
-       this.state = {
-           'authors': authors,
-           'books': books
+        this.state = {
+           'authors': [],
+           'books': []
         } 
     }
 
+    load_data() {
+        axios.get('http://127.0.0.1:8000/api/authors')
+            .then(response => {
+                const authors = response.data['results']
+                this.setState(
+                {
+                    'authors': authors
+                }
+                )
+            }).catch(error => console.log(error))
+
+        axios.get('http://127.0.0.1:8000/api/books')
+            .then(response => {
+                const books = response.data['results']
+                this.setState(
+                {
+                    'books': books
+                }
+                )
+            }).catch(error => console.log(error))
+    }
+
     
-    // componentDidMount() {
-    // axios.get('http://127.0.0.1:8000/api/authors')
-    //         .then(response => {
-    //             const authors = response.data
-    //             this.setState(
-    //             {
-    //                 'authors': authors
-    //             }
-    //             )
-    //         }).catch(error => console.log(error))
-    // }
+    componentDidMount() {
+        this.load_data()
+    }
     
     render () {
         return (
