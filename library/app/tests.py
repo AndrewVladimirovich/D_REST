@@ -16,13 +16,27 @@ class TestAuthorViewSet(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
-    def test_get_list(self):
+    def test_get_guest(self):
         factory = APIRequestFactory()
         request = factory.post('/api/authors', {
             'first_name': 'Petr', 
             'last_name': 'Vasilev', 
             'bithday_year': 1980
-            }, format='json')
+            })
+        view = AuthorModelViewSet.as_view({'post': 'create'})
+        response = view(request)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    
+    def test_create_admin(self):
+        factory = APIRequestFactory()
+        request = factory.post('/api/authors', {
+            'first_name': 'Petr', 
+            'last_name': 'Vasilev', 
+            'bithday_year': 1980
+            })
+        admin = User.objects.create_superuser('admin', None, None)
+        force_authenticate(request, admin)
         view = AuthorModelViewSet.as_view({'post': 'create'})
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
