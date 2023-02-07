@@ -40,3 +40,17 @@ class TestAuthorViewSet(TestCase):
         view = AuthorModelViewSet.as_view({'post': 'create'})
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+    def test_get_detail(self):
+        author = Author.objects.create(first_name='Andrey', last_name='Tretyakov', bithday_year=1979)
+        client = APIClient()
+        response = client.get(f'/api/authors/{author.id}/')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_edit_guest(self):
+        author = Author.objects.create(first_name='Andrey', last_name='Tretyakov', bithday_year=1979)
+        client = APIClient()
+        response = client.put(f'/api/authors/{author.id}/', {'first_name': 'Lev', 'last_name': 'Tolstoy', 'bithday_year': 1900})
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    
