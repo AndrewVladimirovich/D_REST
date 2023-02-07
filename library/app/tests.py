@@ -53,4 +53,10 @@ class TestAuthorViewSet(TestCase):
         response = client.put(f'/api/authors/{author.id}/', {'first_name': 'Lev', 'last_name': 'Tolstoy', 'bithday_year': 1900})
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
-    
+    def test_edit_admin(self):
+        author = Author.objects.create(first_name='Andrey', last_name='Tretyakov', bithday_year=1979)
+        client = APIClient()
+        admin = User.objects.create_superuser('admin', 'admin@admin.com', 'admin')
+        client.login(username='admin', password='admin')
+        response = client.put(f'/api/authors/{author.id}/', {'first_name': 'Lev', 'last_name': 'Tolstoy', 'bithday_year': 1900})
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
