@@ -15,3 +15,14 @@ class TestAuthorViewSet(TestCase):
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+
+    def test_get_list(self):
+        factory = APIRequestFactory()
+        request = factory.post('/api/authors', {
+            'first_name': 'Petr', 
+            'last_name': 'Vasilev', 
+            'bithday_year': 1980
+            }, format='json')
+        view = AuthorModelViewSet.as_view({'post': 'create'})
+        response = view(request)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
