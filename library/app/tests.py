@@ -60,3 +60,11 @@ class TestAuthorViewSet(TestCase):
         client.login(username='admin', password='admin')
         response = client.put(f'/api/authors/{author.id}/', {'first_name': 'Lev', 'last_name': 'Tolstoy', 'bithday_year': 1900})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class TestMath(APISimpleTestCase):
+    def test_sqrt(self):
+        import math
+        self.assertEqual(math.sqrt(4), 2)
+
+    
