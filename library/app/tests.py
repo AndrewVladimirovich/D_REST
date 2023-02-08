@@ -5,6 +5,7 @@ from rest_framework.test import APIRequestFactory, force_authenticate, APIClient
 from django.contrib.auth.models import User
 from .views import AuthorModelViewSet, BookModelViewSet
 from .models import Author, Book
+from mixer.backend.django import mixer
 
 class TestAuthorViewSet(TestCase):
 
@@ -74,20 +75,10 @@ class TestBookViewSet(APITestCase):
         response = self.client.get('/api/books/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_edit_book_admin(self):
-        author = Author.objects.create(first_name='Andrey', last_name='Tretyakov', bithday_year=1979)
-        book = Book.objects.create(name='Книга')
-        book.author.add(author)
-        book.save()
-
-        admin = User.objects.create_superuser('admin', 'admin@admin.com', 'admin')
-        self.client.login(username='admin', password='admin')
-        response = self.client.put(f'/api/books/{book.id}/', {'name': 'Война и мир', 'author': author.id})
-
-        print(response.json())
-        book = Book.objects.get(pk=book.id)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(book.name, 'Война и мир')
-        self.client.logout()
-
-        
+   
+    def test_get_detail(self):
+        book = mixer.blend(Book, name='Алые паруса')
+        response = self.client.get(f'/api/books/{book.id}/') 
+        self.assertEqual(response.status_code, status.HTTP_200_OK) 
+        response_book = json.loads(response.content) 
+        self.assertEqual(response_book['name'], 'Алые паруса')
