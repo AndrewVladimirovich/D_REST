@@ -3,5 +3,5 @@ from .views import MyAPIView
 
 app_name = 'authors'
 urlpatterns = [
-    path('', MyAPIView.as_view({'get': 'list'}))
+    path('', MyAPIView.as_view())
 ]
