@@ -40,9 +40,10 @@ class BookModelViewSet(ModelViewSet):
 class MyAPIView(ViewSet):
    
     def list(self, request):
-       authors = Author.objects.all()
-       serializer = AuthorModelSerializer(authors, many=True)
-       return Response(serializer.data)
+        print(request)
+        authors = Author.objects.all()
+        serializer = AuthorModelSerializer(authors, many=True)
+        return Response(serializer.data)
     
     def destroy(self, request):
         authors = Author.objects.all()
