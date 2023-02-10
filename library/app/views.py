@@ -1,11 +1,11 @@
 from rest_framework.viewsets import ModelViewSet, ViewSet
 from .models import Author, Article, Biography, Book
-from .serializers import AuthorModelSerializer, ArticleModelSerializer, BiographyModelSerializer, BookModelSerializer
+from .serializers import AuthorModelSerializer, ArticleModelSerializer, BiographyModelSerializer, BookModelSerializer, AuthorModelSerializer2
 from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveAPIView, DestroyAPIView, UpdateAPIView
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.pagination import LimitOffsetPagination
@@ -37,20 +37,28 @@ class BookModelViewSet(ModelViewSet):
     permission_classes = [AllowAny]
 
 
-class MyAPIView(ViewSet):
+class MyAPIView(generics.ListAPIView):
+    queryset = Author.objects.all()
+    serializer = AuthorModelSerializer
+
+    def get_serializer_class(self):
+        if self.request.version == '1':
+            return AuthorModelSerializer
+        return AuthorModelSerializer2
    
-    def list(self, request):
-       authors = Author.objects.all()
-       serializer = AuthorModelSerializer(authors, many=True)
-       return Response(serializer.data)
+    # def list(self, request):
+    #     print(request)
+    #     authors = Author.objects.all()
+    #     serializer = AuthorModelSerializer(authors, many=True)
+    #     return Response(serializer.data)
     
-    def destroy(self, request):
-        authors = Author.objects.all()
-        serializer = AuthorModelSerializer(authors, many=True)
-        return Response(serializer.data)
+    # def destroy(self, request):
+    #     authors = Author.objects.all()
+    #     serializer = AuthorModelSerializer(authors, many=True)
+    #     return Response(serializer.data)
 
 
-    @action(detail=False, methods=['get'])
-    def babayka(self, request):
-        return Response({'data': 'RATATA'})
+    # @action(detail=False, methods=['get'])
+    # def babayka(self, request):
+    #     return Response({'data': 'RATATA'})
 
