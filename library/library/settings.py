@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'app',
     'corsheaders',
     'django_filters',
+    'graphene_django',
     'rest_framework.authtoken',
     'drf_yasg',
 ]
@@ -156,3 +157,6 @@ REST_FRAMEWORK = {
     # 'PAGE_SIZE': 2
 }
 
+GRAPHENE = {
+    'SCHEMA': 'library.schema.schema'
+}
