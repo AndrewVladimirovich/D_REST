@@ -4,6 +4,7 @@ import './App.css';
 import AuthorList from './components/Author.js'
 import BookList from './components/Books' 
 import AuthorBookList from './components/AuthorBook'
+import BookForm from './components/BookForm'
 import {HashRouter, Route, Link, Switch, Redirect, BrowserRouter} from 'react-router-dom'
 import axios from 'axios'
 import LoginForm from './components/Auth';
@@ -69,6 +70,26 @@ class App extends React.Component {
         return headers
     }
 
+    createBook(name, author) {
+        const headers = this.get_headers()
+        const data = {name: name, author: author}
+        axios.post('http://127.0.0.1:8000/api/books/', data, {headers})
+            .then(response => {
+                let new_book = response.data
+                const author = this.state.authors.filter((item) => item.id == new_book.author)[0]
+                new_book.author = author
+                this.setState({books: [...this.state.books, new_book]})
+            }).catch(error => console.log(error))
+    }
+
+    deleteBook(id) {
+        const headers = this.get_headers()
+        axios.delete('http://127.0.0.1:8000/api/books/${id}', {headers})
+            .then(response => {
+                this.setState({books: this.state.books.filter((item)=>item.id /= id)})
+            }).catch(error => console.log(error))
+    }
+
     load_data() {
         const headers = this.get_headers()
         axios.get('http://127.0.0.1:8000/api/authors', {headers})
@@ -117,7 +138,8 @@ class App extends React.Component {
                     </nav>
                     <Switch>
                         <Route exact path='/' component={() => <AuthorList authors={this.state.authors}> </AuthorList>} />
-                        <Route exact path='/books' component={() => <BookList items={this.state.books}> </BookList>} />
+                        <Route exact path='/books/create' component={() => <BookForm authors={this.state.authors} createBook={(name, author) => this.createBook(name, author)}></BookForm>} ></Route>
+                        <Route exact path='/books' component={() => <BookList items={this.state.books} deleteBook={(id) =>this.deleteBook(id)}> </BookList>} />
                         <Route exact path='/author/:id' component={() => <AuthorBookList items={this.state.books}> </AuthorBookList>} />
                         <Route exact path='/login ' component={() => <LoginForm get_token={(login, password) => this.get_token(login, password)}></LoginForm>} />
                         <Redirect from='/authors' to='/'/>
