@@ -3,7 +3,7 @@ import React from 'react'
 class BookForm extends React.Component { 
     constructor(props) {
         super(props)
-        this.state = {name: '', author: props.authors[0].id} 
+        this.state = {name: '', author: props.authors[0]?.id} 
     }
     handleChange(event) 
     {
