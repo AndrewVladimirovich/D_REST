@@ -35,7 +35,7 @@ const BookList = ({items, deleteBook}) => {
             </th>
             {items.map((item) => <BookItem item={item} deleteBook={deleteBook}/>)}
         </table>
-        <Link to='/book/create'></Link>
+        <Link to='/books/create'>Create</Link>
         </div>
     ) 
 }

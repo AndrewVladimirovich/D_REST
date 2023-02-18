@@ -3,25 +3,26 @@ import React from 'react'
 class BookForm extends React.Component { 
     constructor(props) {
         super(props)
-        this.state = {name: '', author: 0} 
+        this.state = {name: '', author: props.authors[0].id} 
     }
     handleChange(event) 
     {
         this.setState( 
             {
-                [event.target.name]: event.target.value }
+                [event.target.name]: event.target.value 
+            }
         ); 
     }
     handleSubmit(event) { 
-        console.log(this.state.name) 
-        console.log(this.state.author) 
+        this.props.createBook(this.state.name, this.state.author)
         event.preventDefault()
     }
+
     render() { 
         return (
             <form onSubmit={(event)=> this.handleSubmit(event)}> 
                 <div className="form-group">
-                    <label for="login">name</label>
+                <label for="name">name</label>
                     <input type="text" className="form-control" name="name" value={this.state.name} onChange={(event)=>this.handleChange(event)} />
                 </div>
             <div className="form-group">
